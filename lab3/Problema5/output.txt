@@ -1,0 +1,7 @@
+./file1.txt 13
+
+./file3.txt 14
+
+./file2.txt 8
+
+TOTAL 35
