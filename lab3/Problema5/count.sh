@@ -6,7 +6,7 @@ output_file="$2"
 total_characters=0
 
 if [ ! -d "$director" ]; then
-  echo "Directorul specificat nu există."
+  echo "Directorul specificat nu exista."
   exit 1
 fi
 
