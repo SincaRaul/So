@@ -1,0 +1,19 @@
+nume fisier: image.bmp
+
+inaltime: 100697088
+
+lungime: 604045312
+
+dimensiune: 35658
+
+identificatorul utilizatorului: 1000
+
+timpul ultimei modificari: 15.11.2023
+
+contorul de legaturi: 1
+
+drepturi de acces user: RW-RW-R--
+
+drepturi de acces grup: RW-R--
+
+drepturi de acces altii: R--
