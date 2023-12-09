@@ -41,7 +41,8 @@ int readIntFromHeader(char *header, int offset)
 void process_file(const char *filename, int output_fd) 
 {
     int f_intrare = open(filename, O_RDONLY);
-    if (f_intrare == -1) {
+    if (f_intrare == -1) 
+    {
         perror("Nu am putut deschide fisierul de intrare");
         return;
     }
@@ -90,7 +91,8 @@ void process_file(const char *filename, int output_fd)
             perror("Eroare la scrierea in fisierul de statistica");
         }
 
-    } else if (S_ISREG(st.st_mode)) 
+    } 
+    else if (S_ISREG(st.st_mode)) 
     {
         // Este un fișier obișnuit, dar fără extensia .bmp
         char permissions[10];
