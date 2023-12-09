@@ -127,7 +127,7 @@ struct stat get_file_stats(char *file_path)
     status = stat(file_path, &file_status);
     if (status < 0)
     {
-        perror("Getting stats of file");
+        perror("Eroare la obtinerea informatiilor despre fisier");
         exit(1);
     }
     return file_status;

@@ -10,7 +10,8 @@
 
 
 
-void parsePermissions(mode_t mode, char *permissions) {
+void parsePermissions(mode_t mode, char *permissions)
+{
     permissions[0] = (mode & S_IRUSR) ? 'R' : '-';
     permissions[1] = (mode & S_IWUSR) ? 'W' : '-';
     permissions[2] = (mode & S_IXUSR) ? 'X' : '-';
@@ -25,7 +26,8 @@ void parsePermissions(mode_t mode, char *permissions) {
 
 
 
-int readIntFromHeader(char *header, int offset) {
+int readIntFromHeader(char *header, int offset) 
+{
     unsigned char b1 = (unsigned char)header[offset];
     unsigned char b2 = (unsigned char)header[offset + 1];
     unsigned char b3 = (unsigned char)header[offset + 2];
@@ -36,7 +38,8 @@ int readIntFromHeader(char *header, int offset) {
 
 
 
-void process_file(const char *filename, int output_fd) {
+void process_file(const char *filename, int output_fd) 
+{
     int f_intrare = open(filename, O_RDONLY);
     if (f_intrare == -1) {
         perror("Nu am putut deschide fisierul de intrare");
@@ -47,7 +50,8 @@ void process_file(const char *filename, int output_fd) {
 
     struct stat st;
 
-    if (fstat(f_intrare, &st) == -1) {
+    if (fstat(f_intrare, &st) == -1) 
+    {
         perror("Eroare la obtinerea informatiilor despre fisier");
         close(f_intrare);
         return;
@@ -57,10 +61,12 @@ void process_file(const char *filename, int output_fd) {
 
     char *extension = strrchr(filename, '.');
 
-    if (extension != NULL && strcmp(extension, ".bmp") == 0) {
+    if (extension != NULL && strcmp(extension, ".bmp") == 0) 
+    {
         // Este un fișier BMP
         char bmp_header[54];
-        if (read(f_intrare, bmp_header, sizeof(bmp_header)) == -1) {
+        if (read(f_intrare, bmp_header, sizeof(bmp_header)) == -1) 
+        {
             perror("Eroare la citirea header-ului BMP");
             close(f_intrare);
             return;
@@ -79,11 +85,13 @@ void process_file(const char *filename, int output_fd) {
 
                 filename, height, width, st.st_size, st.st_uid, timeStr, st.st_nlink, permissions, permissions + 3, permissions + 6);
 
-        if (write(output_fd, statistica, strlen(statistica)) == -1) {
+        if (write(output_fd, statistica, strlen(statistica)) == -1) 
+        {
             perror("Eroare la scrierea in fisierul de statistica");
         }
 
-    } else if (S_ISREG(st.st_mode)) {
+    } else if (S_ISREG(st.st_mode)) 
+    {
         // Este un fișier obișnuit, dar fără extensia .bmp
         char permissions[10];
         parsePermissions(st.st_mode, permissions);
@@ -97,11 +105,14 @@ void process_file(const char *filename, int output_fd) {
 
                 filename, st.st_size, st.st_uid, timeStr, st.st_nlink, permissions, permissions + 3, permissions + 6);
 
-        if (write(output_fd, statistica, strlen(statistica)) == -1) {
+        if (write(output_fd, statistica, strlen(statistica)) == -1) 
+        {
             perror("Eroare la scrierea in fisierul de statistica");
         }
 
-    } else if (S_ISDIR(st.st_mode)) {
+    } 
+    else if (S_ISDIR(st.st_mode)) 
+    {
         // Este un director
         char permissions[10];
         parsePermissions(st.st_mode, permissions);
@@ -112,11 +123,14 @@ void process_file(const char *filename, int output_fd) {
 
                 filename, st.st_uid, permissions, permissions + 3, permissions + 6);
 
-        if (write(output_fd, statistica, strlen(statistica)) == -1) {
+        if (write(output_fd, statistica, strlen(statistica)) == -1) 
+        {
             perror("Eroare la scrierea in fisierul de statistica");
         }
 
-    } else if (S_ISLNK(st.st_mode)) {
+    } 
+    else if (S_ISLNK(st.st_mode)) 
+    {
         // Este o legătură simbolică
         char link_target[PATH_MAX];
         ssize_t target_len = readlink(filename, link_target, sizeof(link_target) - 1);
@@ -131,15 +145,18 @@ void process_file(const char *filename, int output_fd) {
 
                 filename, st.st_size, st.st_size, st.st_uid, permissions, permissions + 3, permissions + 6);
 
-        if (write(output_fd, statistica, strlen(statistica)) == -1) {
+        if (write(output_fd, statistica, strlen(statistica)) == -1) 
+        {
             perror("Eroare la scrierea in fisierul de statistica");
         }
     }
     close(f_intrare);
 }
 
-int main(int argc, char *argv[]) {
-    if (argc != 2) {
+int main(int argc, char *argv[]) 
+{
+    if (argc != 2) 
+    {
         printf("Usage: %s <director_intrare>\n", argv[0]);
         return 1;
     }
@@ -151,7 +168,8 @@ int main(int argc, char *argv[]) {
 
     int f_statistica = open(nume_fisier_statistica, O_WRONLY | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
 
-    if (f_statistica == -1) {
+    if (f_statistica == -1) 
+    {
         perror("Nu am putut deschide fisierul de statistica");
         return 1;
     }
@@ -159,7 +177,8 @@ int main(int argc, char *argv[]) {
 
 
     DIR *dir = opendir(nume_director_intrare);
-    if (dir == NULL) {
+    if (dir == NULL) 
+    {
         perror("Nu am putut deschide directorul");
         close(f_statistica);
         return 1;
@@ -168,8 +187,10 @@ int main(int argc, char *argv[]) {
 
 
     struct dirent *entry;
-    while ((entry = readdir(dir)) != NULL) {
-        if (entry->d_name[0] != '.') {
+    while ((entry = readdir(dir)) != NULL) 
+    {
+        if (entry->d_name[0] != '.') 
+        {
             char entry_path[PATH_MAX];
             sprintf(entry_path, "%s/%s", nume_director_intrare, entry->d_name);
             process_file(entry_path, f_statistica);
